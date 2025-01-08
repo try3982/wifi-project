@@ -1,4 +1,4 @@
-package org.example.public_wifi_project;
+package public_wifi_project;
 
 import java.io.IOException;
 import jakarta.servlet.http.*;

@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -89,21 +90,18 @@
             color: gray;
             margin-top: 10px;
         }
-
     </style>
     <script>
         function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     function (position) {
-                        // 성공적으로 위치를 가져온 경우
                         const latitude = position.coords.latitude;
                         const longitude = position.coords.longitude;
                         document.getElementById("lat").value = latitude.toFixed(6);
                         document.getElementById("lnt").value = longitude.toFixed(6);
                     },
                     function (error) {
-                        // 위치를 가져오지 못한 경우
                         switch (error.code) {
                             case error.PERMISSION_DENIED:
                                 alert("위치 정보를 허용하지 않았습니다.");
@@ -137,14 +135,16 @@
     </header>
 
     <div class="input-group">
-        <label for="lat">LAT:</label>
-        <input type="text" id="lat" value="0.0">
+        <form action="wifi-servlet" method="get">
+            <label for="lat">LAT:</label>
+            <input type="text" id="lat" name="lat" value="0.0">
 
-        <label for="lnt">LNT:</label>
-        <input type="text" id="lnt" value="0.0">
+            <label for="lnt">LNT:</label>
+            <input type="text" id="lnt" name="lnt" value="0.0">
 
-        <button class="button" onclick="getLocation()">내 위치 가져오기</button>
-        <button class="button">근처 WIFI 정보 보기</button>
+            <button type="button" class="button" onclick="getLocation()">내 위치 가져오기</button>
+            <button type="submit" class="button">근처 WIFI 정보 보기</button>
+        </form>
     </div>
 
     <table>
@@ -170,9 +170,32 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td colspan="17" class="info-message">위치 정보를 입력한 후에 조회해 주세요.</td>
-        </tr>
+        <c:forEach var="wifi" items="${wifiList}">
+            <tr>
+                <td>${wifi.distance}</td>
+                <td>${wifi.manageNum}</td>
+                <td>${wifi.district}</td>
+                <td>${wifi.name}</td>
+                <td>${wifi.roadAddress}</td>
+                <td>${wifi.detailAddress}</td>
+                <td>${wifi.floor}</td>
+                <td>${wifi.type}</td>
+                <td>${wifi.agency}</td>
+                <td>${wifi.serviceType}</td>
+                <td>${wifi.connection}</td>
+                <td>${wifi.installYear}</td>
+                <td>${wifi.indoor}</td>
+                <td>${wifi.wifiEnv}</td>
+                <td>${wifi.latitude}</td>
+                <td>${wifi.longitude}</td>
+                <td>${wifi.workDate}</td>
+            </tr>
+        </c:forEach>
+        <c:if test="${wifiList == null || wifiList.size() == 0}">
+            <tr>
+                <td colspan="17" class="info-message">위치 정보를 입력한 후에 조회해 주세요.</td>
+            </tr>
+        </c:if>
         </tbody>
     </table>
 </div>
