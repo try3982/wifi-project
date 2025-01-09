@@ -31,7 +31,7 @@ public class WifiXmlParser {
             wifi.setServiceType(getTagValue(row, "X_SWIFI_SVC_SE"));
             wifi.setConnection(getTagValue(row, "X_SWIFI_CMCWR"));
             wifi.setInstallYear(parseInt(getTagValue(row, "X_SWIFI_CNSTC_YEAR")));
-            wifi.setIndoor(parseInt(getTagValue(row, "X_SWIFI_INOUT_DOOR")));
+            wifi.setIndoor(getTagValue(row, "X_SWIFI_INOUT_DOOR"));
             wifi.setWifiEnv(getTagValue(row, "X_SWIFI_REMARS3"));
             wifi.setLatitude(parseDouble(getTagValue(row, "LAT")));
             wifi.setLongitude(parseDouble(getTagValue(row, "LNT")));

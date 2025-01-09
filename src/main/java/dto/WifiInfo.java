@@ -13,7 +13,7 @@ public class WifiInfo {
     private String serviceType; // 서비스 구분;
     private String connection; //망 종류
     private int installYear; //설치 년도;
-    private int indoor; // 실내외 구분
+    private String indoor; // 실내외 구분
     private String wifiEnv; // 와이파이 접속환경
     private double latitude; // 위도(X좌표)
     private double longitude; // 경도(Y좌표)
@@ -50,11 +50,12 @@ public class WifiInfo {
         this.wifiEnv = wifiEnv;
     }
 
-    public int getIndoor() {
+    public String getIndoor() {
         return indoor;
     }
 
-    public void setIndoor(int indoor) {
+
+    public void setIndoor(String indoor) {
         this.indoor = indoor;
     }
 

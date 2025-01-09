@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -14,35 +14,61 @@
             background-color: #f9f9f9;
         }
 
+        nav {
+            background-color: #007bff;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
         .container {
             width: 80%;
-            margin: 0 auto;
+            margin: 20px auto;
             padding: 20px;
         }
 
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-        }
-
-        header a {
-            text-decoration: none;
-            color: #007bff;
-        }
-
-        header a:hover {
-            text-decoration: underline;
-        }
-
-        h1 {
-            font-size: 24px;
+            text-align: center;
             margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .no-data {
+            text-align: center;
+            color: gray;
+            font-style: italic;
         }
 
         .input-group {
             margin-bottom: 20px;
+            text-align: center;
         }
 
         .input-group label {
@@ -53,7 +79,7 @@
             margin-right: 10px;
             padding: 5px;
             font-size: 16px;
-            width: 100px;
+            width: 150px;
         }
 
         .button {
@@ -66,29 +92,6 @@
 
         .button:hover {
             background-color: #0056b3;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-            font-size: 14px;
-        }
-
-        th {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .info-message {
-            color: gray;
-            margin-top: 10px;
         }
     </style>
     <script>
@@ -124,14 +127,14 @@
     </script>
 </head>
 <body>
+<nav>
+    <a href="index.jsp">홈</a> |
+    <a href="history.jsp">위치 히스토리 목록</a> |
+    <a href="load_wifi.jsp">Open API 와이파이 정보 가져오기</a>
+</nav>
 <div class="container">
     <header>
         <h1>와이파이 정보 구하기</h1>
-        <nav>
-            <a href="#">홈</a> |
-            <a href="#">위치 히스토리 목록</a> |
-            <a href="#">Open API 와이파이 정보 가져오기</a>
-        </nav>
     </header>
 
     <div class="input-group">
@@ -193,7 +196,7 @@
         </c:forEach>
         <c:if test="${wifiList == null || wifiList.size() == 0}">
             <tr>
-                <td colspan="17" class="info-message">위치 정보를 입력한 후에 조회해 주세요.</td>
+                <td colspan="17" class="no-data">위치 정보를 입력한 후에 조회해 주세요.</td>
             </tr>
         </c:if>
         </tbody>
