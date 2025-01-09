@@ -37,6 +37,23 @@ public class HistoryServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        try {
+            if ("save".equals(action)) {
+                saveHistory(request, response);
+            } else if ("delete".equals(action)) {
+                deleteHistory(request, response);
+            } else {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "유효하지 않은 요청입니다.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "히스토리 데이터를 처리하는 중 오류가 발생했습니다.");
+        }
+    }
+
+    private void saveHistory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             // 사용자가 입력한 위도와 경도 가져오기
             String latParam = request.getParameter("latitude");
@@ -72,9 +89,37 @@ public class HistoryServlet extends HttpServlet {
             e.printStackTrace();
             request.setAttribute("errorMessage", "위도와 경도 값이 올바른 숫자여야 합니다.");
             doGet(request, response);
-        } catch (Exception e) {
+        }
+    }
+
+    private void deleteHistory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            // 삭제할 히스토리 ID 가져오기
+            String idParam = request.getParameter("id");
+
+            if (idParam == null || idParam.isEmpty()) {
+                request.setAttribute("errorMessage", "삭제할 히스토리 ID가 필요합니다.");
+                doGet(request, response);
+                return;
+            }
+
+            long id = Long.parseLong(idParam);
+
+            // 히스토리 삭제
+            HistoryDao historyDao = new HistoryDao();
+            int rowsDeleted = historyDao.deleteHistoryById((int) id);
+
+            if (rowsDeleted > 0) {
+                System.out.println("히스토리 삭제 성공!");
+            }
+
+            // 히스토리 목록 조회
+            doGet(request, response);
+
+        } catch (NumberFormatException e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "히스토리 데이터를 저장하는 중 오류가 발생했습니다.");
+            request.setAttribute("errorMessage", "삭제할 히스토리 ID가 올바른 숫자여야 합니다.");
+            doGet(request, response);
         }
     }
 }

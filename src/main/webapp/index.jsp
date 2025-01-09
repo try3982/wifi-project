@@ -33,7 +33,7 @@
         }
 
         .container {
-            width: 80%;
+            width: 90%;
             margin: 20px auto;
             padding: 20px;
         }
@@ -47,11 +47,12 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            font-size: 14px; /* 폰트 크기를 줄임 */
         }
 
         th, td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 6px; /* 패딩을 줄임 */
             text-align: center;
         }
 
@@ -78,7 +79,7 @@
         .input-group input {
             margin-right: 10px;
             padding: 5px;
-            font-size: 16px;
+            font-size: 14px;
             width: 150px;
         }
 
@@ -86,7 +87,7 @@
             background-color: #007bff;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 16px;
             cursor: pointer;
         }
 

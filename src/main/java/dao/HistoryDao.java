@@ -56,4 +56,22 @@ public class HistoryDao {
 
         return historyList;
     }
+
+    // 히스토리 삭제 메서드
+    public int deleteHistoryById(int id) {
+        String query = "DELETE FROM history WHERE id = ?";
+        int rowsAffected = 0;
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setInt(1, id);
+            rowsAffected = pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("히스토리 삭제 중 오류 발생: " + e.getMessage());
+        }
+
+        return rowsAffected;
+    }
+
 }

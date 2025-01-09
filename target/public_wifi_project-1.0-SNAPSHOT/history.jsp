@@ -62,7 +62,7 @@
         }
 
         button {
-            background-color: #007bff;
+            background-color: #e74c3c;
             color: white;
             border: none;
             padding: 5px 10px;
@@ -70,14 +70,14 @@
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #c0392b;
         }
     </style>
 </head>
 <body>
 <nav>
     <a href="index.jsp">홈</a> |
-    <a href="history.jsp">위치 히스토리 목록</a> |
+    <a href="history-servlet">위치 히스토리 목록</a> |
     <a href="load_wifi.jsp">Open API 와이파이 정보 가져오기</a>
 </nav>
 <div class="container">
@@ -109,8 +109,7 @@
         </c:forEach>
         <c:if test="${historyList == null || historyList.size() == 0}">
             <tr>
-                <td colspan="5" clas
-                    s="no-data">저장된 히스토리가 없습니다.</td>
+                <td colspan="5" class="no-data">저장된 히스토리가 없습니다.</td>
             </tr>
         </c:if>
         </tbody>

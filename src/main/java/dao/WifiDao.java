@@ -1,5 +1,6 @@
 package dao;
 
+import dto.DistanceCalculator;
 import dto.History;
 import dto.WifiInfo;
 
@@ -11,12 +12,13 @@ public class WifiDao {
 
     // 데이터베이스에 WiFi 데이터를 저장하는 메서드
     public int save(List<WifiInfo> wifiList) {
-        String sql = "INSERT INTO wifi_info (manage_num, district, name, road_address, detail_address, floor, type, agency, service_type, connection, install_year, indoor, wifi_env, latitude, longitude, work_date) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" +
+        String sql = "INSERT INTO wifi_info (distance, manage_num, district, name, road_address, detail_address, floor, type, agency, service_type, connection, install_year, indoor, wifi_env, latitude, longitude, work_date) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" +
                 "ON DUPLICATE KEY UPDATE " +
-                "district = VALUES(district), name = VALUES(name), road_address = VALUES(road_address), detail_address = VALUES(detail_address), " +
-                "floor = VALUES(floor), type = VALUES(type), agency = VALUES(agency), service_type = VALUES(service_type), " +
-                "connection = VALUES(connection), install_year = VALUES(install_year), indoor = VALUES(indoor), wifi_env = VALUES(wifi_env), " +
+                "distance = VALUES(distance), manage_num = VALUES(manage_num), district = VALUES(district), name = VALUES(name), " +
+                "road_address = VALUES(road_address), detail_address = VALUES(detail_address), floor = VALUES(floor), " +
+                "type = VALUES(type), agency = VALUES(agency), service_type = VALUES(service_type), connection = VALUES(connection), " +
+                "install_year = VALUES(install_year), indoor = VALUES(indoor), wifi_env = VALUES(wifi_env), " +
                 "latitude = VALUES(latitude), longitude = VALUES(longitude), work_date = VALUES(work_date)";
         int savedCount = 0;
 
@@ -26,22 +28,23 @@ public class WifiDao {
             int batchSize = 0;
 
             for (WifiInfo wifi : wifiList) {
-                pstmt.setString(1, wifi.getManageNum());
-                pstmt.setString(2, wifi.getDistrict());
-                pstmt.setString(3, wifi.getName());
-                pstmt.setString(4, wifi.getRoadAddress());
-                pstmt.setString(5, wifi.getDetailAddress());
-                pstmt.setString(6, wifi.getFloor());
-                pstmt.setString(7, wifi.getType());
-                pstmt.setString(8, wifi.getAgency());
-                pstmt.setString(9, wifi.getServiceType());
-                pstmt.setString(10, wifi.getConnection());
-                pstmt.setInt(11, wifi.getInstallYear());
-                pstmt.setString(12, wifi.getIndoor());
-                pstmt.setString(13, wifi.getWifiEnv());
-                pstmt.setDouble(14, wifi.getLatitude());
-                pstmt.setDouble(15, wifi.getLongitude());
-                pstmt.setTimestamp(16, wifi.getWorkDate() != null ? Timestamp.valueOf(wifi.getWorkDate()) : null);
+                pstmt.setDouble(1, wifi.getDistance()); // distance 값
+                pstmt.setString(2, wifi.getManageNum());
+                pstmt.setString(3, wifi.getDistrict());
+                pstmt.setString(4, wifi.getName());
+                pstmt.setString(5, wifi.getRoadAddress());
+                pstmt.setString(6, wifi.getDetailAddress());
+                pstmt.setString(7, wifi.getFloor());
+                pstmt.setString(8, wifi.getType());
+                pstmt.setString(9, wifi.getAgency());
+                pstmt.setString(10, wifi.getServiceType());
+                pstmt.setString(11, wifi.getConnection());
+                pstmt.setInt(12, wifi.getInstallYear());
+                pstmt.setString(13, wifi.getIndoor());
+                pstmt.setString(14, wifi.getWifiEnv());
+                pstmt.setDouble(15, wifi.getLatitude());
+                pstmt.setDouble(16, wifi.getLongitude());
+                pstmt.setTimestamp(17, wifi.getWorkDate() != null ? Timestamp.valueOf(wifi.getWorkDate()) : null);
 
                 pstmt.addBatch();
                 batchSize++;
@@ -64,6 +67,70 @@ public class WifiDao {
 
         return savedCount;
     }
+
+    public int saveWithDistance(List<WifiInfo> wifiList, double userLat, double userLng) {
+        String sql = "INSERT INTO wifi_info (distance, manage_num, district, name, road_address, detail_address, floor, type, agency, service_type, connection, install_year, indoor, wifi_env, latitude, longitude, work_date) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" +
+                "ON DUPLICATE KEY UPDATE " +
+                "distance = VALUES(distance), manage_num = VALUES(manage_num), district = VALUES(district), name = VALUES(name), " +
+                "road_address = VALUES(road_address), detail_address = VALUES(detail_address), floor = VALUES(floor), " +
+                "type = VALUES(type), agency = VALUES(agency), service_type = VALUES(service_type), connection = VALUES(connection), " +
+                "install_year = VALUES(install_year), indoor = VALUES(indoor), wifi_env = VALUES(wifi_env), " +
+                "latitude = VALUES(latitude), longitude = VALUES(longitude), work_date = VALUES(work_date)";
+
+        int savedCount = 0;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            int batchSize = 0;
+
+            for (WifiInfo wifi : wifiList) {
+                // 사용자 위치와 WiFi 위치 간 거리 계산
+                double distance = DistanceCalculator.calculateDistance(userLat, userLng, wifi.getLatitude(), wifi.getLongitude());
+                wifi.setDistance(distance);
+
+                pstmt.setDouble(1, distance); // distance
+                pstmt.setString(2, wifi.getManageNum());
+                pstmt.setString(3, wifi.getDistrict());
+                pstmt.setString(4, wifi.getName());
+                pstmt.setString(5, wifi.getRoadAddress());
+                pstmt.setString(6, wifi.getDetailAddress());
+                pstmt.setString(7, wifi.getFloor());
+                pstmt.setString(8, wifi.getType());
+                pstmt.setString(9, wifi.getAgency());
+                pstmt.setString(10, wifi.getServiceType());
+                pstmt.setString(11, wifi.getConnection());
+                pstmt.setInt(12, wifi.getInstallYear());
+                pstmt.setString(13, wifi.getIndoor());
+                pstmt.setString(14, wifi.getWifiEnv());
+                pstmt.setDouble(15, wifi.getLatitude());
+                pstmt.setDouble(16, wifi.getLongitude());
+                pstmt.setTimestamp(17, wifi.getWorkDate() != null ? Timestamp.valueOf(wifi.getWorkDate()) : null);
+
+                pstmt.addBatch();
+                batchSize++;
+
+                // 500개마다 배치 실행
+                if (batchSize % 500 == 0) {
+                    int[] results = pstmt.executeBatch();
+                    savedCount += results.length;
+                    System.out.println("500개의 WiFi 데이터 저장 완료.");
+                }
+            }
+
+            // 남아있는 배치 실행
+            int[] results = pstmt.executeBatch();
+            savedCount += results.length;
+
+        } catch (SQLException e) {
+            System.err.println("WiFi 데이터 저장 중 오류 발생: " + e.getMessage());
+        }
+
+        return savedCount;
+    }
+
+
 
     // 사용자의 위치를 기준으로 가장 가까운 WiFi 데이터를 가져오는 메서드
     public List<WifiInfo> findNearestWifi(double userLat, double userLng) {
