@@ -12,16 +12,32 @@ import java.util.List;
 public class BookmarkDao {
 
     // 북마크 데이터 저장 메서드
-    public int addBookmark(Long wifiId, Long bookmarkGroupId) {
-        String query = "INSERT INTO bookmark (group_id, wifi_id, created_at) VALUES (?, ?, CURRENT_TIMESTAMP)";
+    public int addBookmark(String name, int order) {
+        String query = "INSERT INTO bookmark (group_name, sort_order, created_at) VALUES (?, ?, CURRENT_TIMESTAMP)";
         int rowsAffected = 0;
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(query)) {
 
-            pstmt.setLong(1, bookmarkGroupId);
-            pstmt.setLong(2, wifiId);
+            pstmt.setString(1, name);
+            pstmt.setInt(2, order);
 
+            rowsAffected = pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error adding bookmark group: " + e.getMessage());
+        }
+
+        return rowsAffected;
+    }
+
+    public int addBookGroup(int groupId, int wifiId) {
+        String query = "INSERT INTO bookmark (group_id, wifi_id) VALUES (?, ?)";
+        int rowsAffected = 0;
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, groupId);
+            pstmt.setInt(2, wifiId);
             rowsAffected = pstmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error adding bookmark: " + e.getMessage());
@@ -29,6 +45,8 @@ public class BookmarkDao {
 
         return rowsAffected;
     }
+
+
 
     // 모든 북마크 데이터 조회 메서드
     public List<Bookmark> getAllBookmarks() {
@@ -107,4 +125,6 @@ public class BookmarkDao {
 
         return rowsAffected;
     }
+
+
 }

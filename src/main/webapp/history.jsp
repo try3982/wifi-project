@@ -7,78 +7,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>위치 히스토리 목록</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-        }
-
-        nav {
-            background-color: #007bff;
-            padding: 10px;
-            color: white;
-            text-align: center;
-        }
-
-        nav a {
-            color: white;
-            margin: 0 15px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        nav a:hover {
-            text-decoration: underline;
-        }
-
-        .container {
-            width: 80%;
-            margin: 20px auto;
-            padding: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-
-        th {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .no-data {
-            text-align: center;
-            color: gray;
-            font-style: italic;
-        }
-
-        button {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #c0392b;
-        }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
+        nav { background-color: #007bff; padding: 10px; color: white; text-align: center; }
+        nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
+        nav a:hover { text-decoration: underline; }
+        .container { width: 80%; margin: 20px auto; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background-color: #28a745; color: white; }
+        .no-data { text-align: center; color: gray; font-style: italic; }
+        button { background-color: #e74c3c; color: white; border: none; padding: 5px 10px; cursor: pointer; }
+        button:hover { background-color: #c0392b; }
     </style>
 </head>
 <body>
 <nav>
-    <a href="index.jsp">홈</a> |
-    <a href="history-servlet">위치 히스토리 목록</a> |
-    <a href="load_wifi.jsp">Open API 와이파이 정보 가져오기</a>
+    <a href="index.jsp">홈</a> | <a href="load_wifi.jsp">와이파이 정보 가져오기</a> | <a href="wifi-servlet">WiFi 정보 보기</a>
 </nav>
 <div class="container">
     <h1>위치 히스토리 목록</h1>
@@ -100,7 +44,8 @@
                 <td>${history.longitude}</td>
                 <td>${history.queryTime}</td>
                 <td>
-                    <form action="delete-history" method="post">
+                    <form action="history-servlet" method="post">
+                        <input type="hidden" name="action" value="delete">
                         <input type="hidden" name="id" value="${history.id}">
                         <button type="submit">삭제</button>
                     </form>

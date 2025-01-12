@@ -47,12 +47,12 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            font-size: 14px; /* 폰트 크기를 줄임 */
+            font-size: 14px;
         }
 
         th, td {
             border: 1px solid #ddd;
-            padding: 6px; /* 패딩을 줄임 */
+            padding: 6px;
             text-align: center;
         }
 

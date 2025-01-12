@@ -1,42 +1,34 @@
 package dao;
 
 import dto.History;
-
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryDao {
-
-    // 히스토리 저장 메서드
     public int saveHistory(History history) {
         String query = "INSERT INTO history (latitude, longitude, query_time, remarks) VALUES (?, ?, ?, ?)";
-        int rowsAffected = 0;
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(query)) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             pstmt.setDouble(1, history.getLatitude());
             pstmt.setDouble(2, history.getLongitude());
             pstmt.setTimestamp(3, Timestamp.valueOf(history.getQueryTime()));
             pstmt.setString(4, history.getRemarks());
-
-            rowsAffected = pstmt.executeUpdate();
+            return pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("히스토리 저장 중 오류 발생: " + e.getMessage());
+            e.printStackTrace();
         }
-
-        return rowsAffected;
+        return 0;
     }
 
-    // 히스토리 목록 조회 메서드
     public List<History> getAllHistory() {
         List<History> historyList = new ArrayList<>();
         String query = "SELECT id, latitude, longitude, query_time, remarks FROM history ORDER BY query_time DESC";
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(query);
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query);
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
@@ -46,32 +38,23 @@ public class HistoryDao {
                 history.setLongitude(rs.getDouble("longitude"));
                 history.setQueryTime(rs.getTimestamp("query_time").toLocalDateTime());
                 history.setRemarks(rs.getString("remarks"));
-
                 historyList.add(history);
             }
-
         } catch (SQLException e) {
-            System.err.println("히스토리 목록 조회 중 오류 발생: " + e.getMessage());
+            e.printStackTrace();
         }
-
         return historyList;
     }
 
-    // 히스토리 삭제 메서드
     public int deleteHistoryById(int id) {
         String query = "DELETE FROM history WHERE id = ?";
-        int rowsAffected = 0;
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(query)) {
-
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, id);
-            rowsAffected = pstmt.executeUpdate();
+            return pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("히스토리 삭제 중 오류 발생: " + e.getMessage());
+            e.printStackTrace();
         }
-
-        return rowsAffected;
+        return 0;
     }
-
 }

@@ -1,5 +1,7 @@
 package dto;
 
+import java.time.LocalDateTime;
+
 public class WifiInfo {
     private Double distance; //거리
     private String  manageNum; //관리번호
@@ -17,6 +19,7 @@ public class WifiInfo {
     private String wifiEnv; // 와이파이 접속환경
     private double latitude; // 위도(X좌표)
     private double longitude; // 경도(Y좌표)
+    private LocalDateTime TiemSamp;;
 
     public String getWorkDate() {
         return workDate;

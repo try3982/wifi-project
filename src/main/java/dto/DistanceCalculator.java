@@ -1,17 +1,15 @@
 package dto;
 
 public class DistanceCalculator {
+    public static double calculateDistance(double lat1, double lng1, double lat2, double lng2) {
+        final int EARTH_RADIUS_KM = 6371;
 
-    private static final double EARTH_RADIUS_KM = 6371.0;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLng = Math.toRadians(lng2 - lng1);
 
-    // 두 지점 간 거리 계산 메서드
-    public static double calculateDistance(double userLat, double userLng, double wifiLat, double wifiLng) {
-        double latDistance = Math.toRadians(userLat - wifiLat);
-        double lngDistance = Math.toRadians(userLng - wifiLng);
-
-        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-                + Math.cos(Math.toRadians(userLat)) * Math.cos(Math.toRadians(wifiLat))
-                * Math.sin(lngDistance / 2) * Math.sin(lngDistance / 2);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                        Math.sin(dLng / 2) * Math.sin(dLng / 2);
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return EARTH_RADIUS_KM * c;
