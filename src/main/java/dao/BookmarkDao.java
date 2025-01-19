@@ -24,7 +24,7 @@ public class BookmarkDao {
 
             rowsAffected = pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error adding bookmark group: " + e.getMessage());
+            System.err.println("북마크 추가 오류 " + e.getMessage());
         }
 
         return rowsAffected;
@@ -40,7 +40,7 @@ public class BookmarkDao {
             pstmt.setInt(2, wifiId);
             rowsAffected = pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error adding bookmark: " + e.getMessage());
+            System.err.println("북마크 추가 오류: " + e.getMessage());
         }
 
         return rowsAffected;
@@ -72,7 +72,7 @@ public class BookmarkDao {
                 bookmarks.add(bookmark);
             }
         } catch (SQLException e) {
-            System.err.println("Error fetching bookmarks: " + e.getMessage());
+            System.err.println("북마크 추가 오류: " + e.getMessage());
         }
 
         return bookmarks;
@@ -103,7 +103,7 @@ public class BookmarkDao {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error fetching bookmark by ID: " + e.getMessage());
+            System.err.println("북마크 id 에러 : " + e.getMessage());
         }
 
         return bookmark;
@@ -120,7 +120,7 @@ public class BookmarkDao {
             pstmt.setLong(1, id);
             rowsAffected = pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error deleting bookmark: " + e.getMessage());
+            System.err.println("북마크 삭제 오류 " + e.getMessage());
         }
 
         return rowsAffected;
